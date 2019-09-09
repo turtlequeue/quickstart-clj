@@ -5,12 +5,18 @@
   (:import [java.util.concurrent CompletableFuture]))
 
 (defn- get-token []
-  (java.util.UUID/fromString
-    (System/getenv "TURTLEQUEUE_USER_TOKEN")))
+  (try
+    (java.util.UUID/fromString
+      (System/getenv "TURTLEQUEUE_USER_TOKEN"))
+    (catch Exception ex
+      (throw (Exception. "Missing env var TURTLEQUEUE_USER_TOKEN" )))))
 
 (defn get-api-key []
-  (java.util.UUID/fromString
-    (System/getenv "TURTLEQUEUE_API_KEY")))
+  (try
+    (java.util.UUID/fromString
+      (System/getenv "TURTLEQUEUE_API_KEY"))
+    (catch Exception ex
+      (throw (Exception. "Missing env var TURTLEQUEUE_API_KEY")))))
 
 
 (deftest turtlequeue-test
@@ -26,19 +32,19 @@
 
   (testing "can init"
     (is (turtlequeue.api/init {:host (or (System/getenv "TURTLEQUEUE_API_HOST") "turtlequeue.com")
-                         :type :ws
-                         :protocol :https})))
+                               :type :ws
+                               :protocol :https})))
 
   (testing "can connect"
     (let [connect-p (promise)]
 
       (turtlequeue.api/on "connect"
-                    (fn [evt]
-                      (println "connect event")
-                      (deliver connect-p evt)))
+                          (fn [evt]
+                            (println "connect event")
+                            (deliver connect-p evt)))
 
       (turtlequeue.api/connect {:UserToken (get-token)
-                          :ApiKey (get-api-key)})
+                                :ApiKey (get-api-key)})
 
       (is (not= ::timeout (deref connect-p 1000 ::timeout)))
       (when (realized? connect-p)
@@ -53,17 +59,17 @@
           sub-p (promise)
           pub-p (promise)
           ^CompletableFuture sub-res (turtlequeue.api/subscribe {:channel channel}
-                                       (fn [err data metadata]
-                                         (println "data received on channel #test" err data metadata)
-                                         (deliver sub-p {:err err :data data :metadata metadata})))]
+                                                                (fn [err data metadata]
+                                                                  (println "data received on channel #test" err data metadata)
+                                                                  (deliver sub-p {:err err :data data :metadata metadata})))]
 
       (is (not= ::timeout (deref sub-res 1000 ::timeout)))
 
       (when (.isDone sub-res)
         (let [^CompletableFuture publish-res (turtlequeue.api/publish {:channel channel
-                                                                 :payload payload}
-                                                                (fn publish-callback [err data metadata]
-                                                                  (deliver pub-p {:err err :data data :metadata metadata})))]
+                                                                       :payload payload}
+                                                                      (fn publish-callback [err data metadata]
+                                                                        (deliver pub-p {:err err :data data :metadata metadata})))]
 
           (is (not= ::timeout (deref publish-res 1000 ::timeout)))
           (is (not= ::timeout (deref sub-p 1000 ::timeout)))
