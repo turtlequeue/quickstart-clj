@@ -34,7 +34,7 @@
   (def connect-res @(turtlequeue.api/connect {:UserToken (java.util.UUID/fromString (System/getenv "TURTLEQUEUE_USER_TOKEN"))
                                               :ApiKey (java.util.UUID/fromString (System/getenv "TURTLEQUEUE_API_KEY"))}))
 
-  (def channel (str "#test-" (System/currentTimeMillis)))
+  (def channel (str "#test-clj-quickstart-repl" (System/currentTimeMillis)))
 
   (def sub-res @(turtlequeue.api/subscribe {:channel channel}
                                            (fn [err data metadata]
@@ -62,7 +62,3 @@
 ;; This concludes the tutorial :)
 ;; You may want to look at the tests too, they include some potentially
 ;; interesting patterns
-;;
-;; (def driver (turtlequeue.create/make {:host (or (System/getenv "TURTLEQUEUE_API_HOST") "turtlequeue.com")
-;;                                 :type :ws
-;;                                 :protocol :https}))

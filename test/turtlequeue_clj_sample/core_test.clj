@@ -93,9 +93,13 @@
         (let [subscription-id (get-in (deref sub-res turtle-timeout ::timeout) [:data :id])
               reader (deref (turtlequeue.api/reader {:subscriptionId subscription-id
                                                      :startMessageId "earliest"}) turtle-timeout ::timeout)
-              first-msg (deref (turtlequeue.reader/readNext reader ) turtle-timeout ::timeout)]
+              first-msg (deref (turtlequeue.reader/readNext reader) turtle-timeout ::timeout)]
           (is (not= ::timeout reader))
           (is
             (= (:data first-msg)
                {:channel channel
-                :payload payload})))))))
+                :payload payload}))
+
+          (is (not= ::timeout
+                    (deref (turtlequeue.reader/close reader) 1000 ::timeout)))
+          )))))
