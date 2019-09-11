@@ -87,6 +87,15 @@
           (is (not= ::timeout (deref pub-p turtle-timeout ::timeout)))
           (when (realized? pub-p)
             (is (nil? (:err @pub-p)))
-            (is (= 1 (:publishedCount (:data @pub-p)))))))))
+            (is (= 1 (:publishedCount (:data @pub-p)))))))
 
-  )
+      (testing "can replay events"
+        (let [subscription-id (get-in (deref sub-res turtle-timeout ::timeout) [:data :id])
+              reader (deref (turtlequeue.api/reader {:subscriptionId subscription-id
+                                                     :startMessageId "earliest"}) turtle-timeout ::timeout)
+              first-msg (deref (turtlequeue.reader/readNext reader ) turtle-timeout ::timeout)]
+          (is (not= ::timeout reader))
+          (is
+            (= (:data first-msg)
+               {:channel channel
+                :payload payload})))))))
