@@ -1,11 +1,10 @@
-
 <a href="https://circleci.com/gh/turtlequeue/quickstart-clj/tree/master">
 <img alt="CI Status" src="https://circleci.com/gh/turtlequeue/quickstart-clj.svg?style=svg">
 </a>
 
-<!-- <a href="http://cljdoc.org/d/com.turtlequeue/clj-client"> -->
-<!--   <img alt="cljdoc link" src="https://cljdoc.org/badge/com.turtlequeue/clj-client"> -->
-<!-- </a> -->
+<a href="http://cljdoc.org/d/com.turtlequeue/clj-client">
+  <img alt="cljdoc badge link" src="https://cljdoc.org/badge/com.turtlequeue/clj-client/">
+</a>
 
 <h3 align="center">TurtleQueue</h3>
 
