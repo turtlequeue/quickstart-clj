@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [com.turtlequeue/clj-client "0.0.8"]]
+                 [com.turtlequeue/clj-client "0.0.11"]]
   :main ^:skip-aot turtlequeue-quickstart.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
