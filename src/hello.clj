@@ -17,9 +17,6 @@
 
 (defn client []
   (-> (Client/builder)
-      (.setHost "localhost")
-      (.setPort (int 35000))
-      (.setSecure false)
       (.setUserToken (user-token))
       (.setApiKey (api-key))
       ;; add transit for clj types
