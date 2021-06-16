@@ -1,0 +1,3 @@
+{:deps
+ {com.turtlequeue/java-sdk {:mvn/version "1.0.4"}
+  com.cognitect/transit-clj {:mvn/version "1.0.324"}}}
